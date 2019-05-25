@@ -6,11 +6,11 @@ namespace WpfProject.FirstTask
     {
         public List<List<int>> GetValues(int n, int m)
         {
-            List<List<int>> values = new List<List<int>>();
+            List<List<int>> values = new List<List<int>>(n);
 
             for (int i = 0, k = 0; i < n; i++, k++)
             {
-                values.Add(new List<int>());
+                values.Add(new List<int>(m));
 
                 for (int j = 0, q = 0; j < m; j++, q++)
                 {

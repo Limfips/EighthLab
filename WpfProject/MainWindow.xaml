@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Восьмая лабораторная" Height="350" Width="505" MinHeight="70" MinWidth="505">
+        Title="Восьмая лабораторная" Height="407" Width="505" MinHeight="70" MinWidth="505">
     <Window.Resources>
         <DataTemplate x:Key="DataTemplateLevel2">
             <TextBlock Text="{Binding}" Height="20" Width="20" Margin="4,4,4,4"/>
@@ -45,7 +45,7 @@
                     </GroupBox>
                     <GroupBox Grid.Row="1" Header="Результат" Padding="20">
                         <ItemsControl HorizontalAlignment="Center" 
-                                      x:Name="Lst" ItemTemplate="{DynamicResource DataTemplateLevel1}"/>
+                                      x:Name="MatrixControl" ItemTemplate="{DynamicResource DataTemplateLevel1}"/>
                     </GroupBox>
                 </Grid>
             </TabItem>
@@ -63,31 +63,36 @@
                     <GroupBox Header="Поиск в течении введенного часа" Padding="5" Margin="5">
                         <StackPanel Visibility="Visible">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Часы: "/>
-                                <ComboBox x:Name="HoursComboBox"/>
-                                <TextBlock Text="Минуты: "/>
-                                <ComboBox x:Name="MinutesComboBox"/>
+                                <TextBlock Text="Часы: " Margin="5"/>
+                                <ComboBox x:Name="HoursComboBox"  Margin="5"/>
+                                <TextBlock Text="Минуты: " Margin="5"/>
+                                <ComboBox x:Name="MinutesComboBox"  Margin="5"/>
                             </StackPanel>
-                            <DatePicker x:Name="DatePicker"/>
-                            <Button Height="20" x:Name="FirstButton" Click="SecondTaskButton_OnClick"/>
+                            <DatePicker x:Name="DatePicker"  Margin="5"/>
+                            <Button Height="20" x:Name="SearchByDepartureTimeButton" 
+                                    Click="SearchByDepartureTimeButton_OnClick"  Margin="5"/>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Grid.Row="1" Grid.Column="0" 
                               Header="Поиск по номеру рейса" Padding="5" Margin="5">
                         <StackPanel>
-                            <TextBox x:Name="FlightNumberTextBox"/>
-                            <Button Height="20" x:Name="SecondButton" Click="SecondTaskButton_OnClick"/>
+                            <TextBox x:Name="FlightNumberTextBox"  Margin="5"/>
+                            <Button Height="20" x:Name="SearchByFlightNumberButton" Margin="5"
+                                    Click="SearchByFlightNumberButton_OnClick"/>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Grid.Row="2" Grid.Column="0" 
                               Header="Поиск по пункту назначения" Padding="5" Margin="5">
                         <StackPanel>
-                            <ComboBox x:Name="ComboBox"/>
-                            <Button x:Name="ThirdButton" Height="20" Click="SecondTaskButton_OnClick"/>
+                            <ComboBox x:Name="ComboBox" Margin="5"/>
+                            <Button x:Name="SearchByDestinationNameButton"  Margin="5"
+                                    Height="20" Click="SearchByDestinationNameButton_OnClick"/>
                         </StackPanel>
                     </GroupBox>
-                    <ListBox Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" 
-                             x:Name ="ListBox" MouseDoubleClick="ListBox_OnMouseDoubleClick"/>
+                    <GroupBox Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" 
+                              Margin="5" Padding="5" Header="Список рейсов'">
+                        <ListBox x:Name ="ListBox" MouseDoubleClick="ListBox_OnMouseDoubleClick"/>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Третье задание (1-й пункт)">
@@ -96,7 +101,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <TextBlock Margin="5" Text="Введите путь к файлу"/>
                         <TextBox Margin="5" x:Name="PathTextBox" Text="e:\\cSharp.txt" Width="200"/>
                         <Button Margin="5" Height="20" Width="50" Click="ThirdTaskButton_OnClick"/>
@@ -106,8 +111,12 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Background="Gray" Margin="10" x:Name="BeforeText"/>
-                        <TextBlock Grid.Column="1" Background="Gray" Margin="10" x:Name="AfterText"/>
+                        <GroupBox Grid.Column="0" Margin="10" Padding="5" Header="До">
+                            <TextBox  x:Name="BeforeTextBox"/>
+                        </GroupBox>
+                        <GroupBox Grid.Column="1" Margin="10" Padding="5" Header="После">
+                            <TextBox x:Name="AfterTextBox" />
+                        </GroupBox>
                     </Grid>
                 </Grid>
             </TabItem>

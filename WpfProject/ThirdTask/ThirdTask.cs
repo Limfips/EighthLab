@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -7,27 +8,26 @@ namespace WpfProject.ThirdTask
 {
     public class ThirdTask
     {
-        public void RemoveAllComments(string filename)
+        public List<string> RemoveAllComments(string filename)
         {
+            List<string> values = new List<string>();
             try
             {
                 StringBuilder content = new StringBuilder();
                 content.Append(File.ReadAllText(filename));
-                
-                content.Replace("summary", "");
-
+                values.Add(content.ToString());
                 RemoveComments(content, "/*", "*/");
                 RemoveComments(content, "/// <summary>", "/// </summary>");
                 RemoveComments(content, "//", Environment.NewLine);
-
                 File.WriteAllText(filename + ".txt", content.ToString());
 
-                MessageBox.Show($"Создан файл {filename}.txt");
+                values.Add(content.ToString());
             }
             catch (Exception)
             {
                 MessageBox.Show("Повторите ввод");
             }
+            return values;
         }
 
         private void RemoveComments(StringBuilder content, string start, string end)

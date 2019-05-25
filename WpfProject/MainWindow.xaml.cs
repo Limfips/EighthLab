@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,7 +20,6 @@ namespace WpfProject
         public MainWindow()
         {
             InitializeComponent(); 
-            
             //Задаю минуты и часы в соответствующие поля------
             List<int> hours = new List<int>();
             for (int i = 0; i < 24; i++)
@@ -35,7 +35,7 @@ namespace WpfProject
             MinutesComboBox.ItemsSource = minutes;
             //------------------------------------------------
             //Задаю значения в ComboBox-----------------------
-            var valuesAsList = Enum.GetNames(typeof(Airport.DestinationNames));
+            string[] valuesAsList = Enum.GetNames(typeof(Airport.DestinationNames));
             foreach (var item in valuesAsList)
             {
                 ComboBox.Items.Add(item);
@@ -51,7 +51,8 @@ namespace WpfProject
             {
                 int n = Convert.ToInt32(NTextBox.Text);
                 int m = Convert.ToInt32(MTextBox.Text);
-                Lst.ItemsSource = new FirstTask.FirstTask().GetValues(n,m);
+                MatrixControl.ItemsSource = new FirstTask.FirstTask().GetValues(n,m);
+                
             }
             catch (Exception exception)
             {
@@ -59,86 +60,87 @@ namespace WpfProject
             }
         }
         /// <summary>
-        /// Второе задание
+        /// Второе задание. Поиск по времени
         /// </summary>
-        private void SecondTaskButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            ListBox.Items.Clear();
-            //По дате
-            if ((Button) sender == FirstButton)
-            {
-                foreach (var aeroplane in airport.GetAeroplanes(GetDateTime()))
-                {
-                    ListBox.Items.Add(aeroplane.FlightNumber);
-                }
-            }
-            // По номеру рейса
-            if ((Button) sender == SecondButton)
-            {
-                try
-                {
-                    Aeroplane aeroplane = airport.GetInformationAeroplane(Convert.ToInt32(FlightNumberTextBox.Text));
-                    string text = $"Название пункта назначения: {aeroplane.DestinationName}\n" +
-                                  $"Код аэрокомпании: {aeroplane.AirlineCode}\n" +
-                                  $"Номер рейса: {aeroplane.FlightNumber}\n" +
-                                  $"Время отправления: {aeroplane.DepartureTime}";
-                    MessageBox.Show(text);
-                }
-                catch (FormatException)
-                {
-                    MessageBox.Show("Введите значение еще раз");
-                }
-                catch(NullReferenceException)
-                {
-                    MessageBox.Show("В данный момент данные рейсы отсутствуют");
-                }
-            }
-            //По названию пункта назначения
-            if ((Button) sender == ThirdButton)
-            {
-                IOrderedEnumerable<Aeroplane> aeroplanes = airport.GetAeroplanes((Airport.DestinationNames)Enum
-                    .Parse(typeof(Airport.DestinationNames),ComboBox.SelectedItem.ToString()));
-                foreach (var aeroplane in aeroplanes)
-                {
-                    ListBox.Items.Add(aeroplane.FlightNumber);
-                } 
-            }
-
-        }
-        public DateTime? GetDateTime()
+        private void SearchByDepartureTimeButton_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (DatePicker.SelectedDate != null)
+                ListBox.Items.Clear();
+                DateTime dateTime = GetDateTime();
+                List<Aeroplane> aeroplanes = airport.GetAeroplanes(dateTime);
+                foreach (var aeroplane in aeroplanes)
                 {
-                    DateTime dateTime = (DateTime) DatePicker.SelectedDate;
-                    dateTime = dateTime.AddHours((int)HoursComboBox.SelectedItem-dateTime.Hour);
-                    dateTime = dateTime.AddMinutes((int)MinutesComboBox.SelectedItem-dateTime.Minute);
-                    return dateTime;
+                    ListBox.Items.Add(aeroplane);
                 }
-
-                throw new NullReferenceException();
             }
             catch (NullReferenceException)
             {
                 MessageBox.Show("Введите значения заново");
-                return null;
             }
+        }
+        /// <summary>
+        /// Второе задание. Поиск по номеру рейса
+        /// </summary>
+        private void SearchByFlightNumberButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Aeroplane aeroplane = airport.GetAeroplane(Convert.ToInt32(FlightNumberTextBox.Text));
+                string text = airport.GetInformationAeroplane(aeroplane);
+                MessageBox.Show(text);
+                
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Введите значение еще раз");
+            }
+            catch(NullReferenceException)
+            {
+                MessageBox.Show("В данный момент данные рейсы отсутствуют");
+            }
+        }
+        /// <summary>
+        /// Второе задание. Поиск по пункту назначения
+        /// </summary>
+        private void SearchByDestinationNameButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ListBox.Items.Clear();
+            Airport.DestinationNames destinationNames = (Airport.DestinationNames)ComboBox.SelectedIndex;
+            List<Aeroplane> aeroplanes = airport.GetAeroplanes(destinationNames);
+            foreach (var aeroplane in aeroplanes)
+            {
+                ListBox.Items.Add(aeroplane);
+            } 
+        }
+
+        private DateTime GetDateTime()
+        {
+            if (DatePicker.SelectedDate.HasValue)
+            {
+                DateTime dateTime = (DateTime) DatePicker.SelectedDate;
+                dateTime = dateTime.AddHours((int)HoursComboBox.SelectedItem-dateTime.Hour);
+                dateTime = dateTime.AddMinutes((int)MinutesComboBox.SelectedItem-dateTime.Minute);
+                return dateTime;
+            }
+            throw new NullReferenceException();
         }
         
         private void ListBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Aeroplane aeroplane = airport.GetInformationAeroplane((int)ListBox.SelectedItem);
-            string text = $"Название пункта назначения: {aeroplane.DestinationName}\n" +
-                          $"Код аэрокомпании: {aeroplane.AirlineCode}\n" +
-                          $"Номер рейса: {aeroplane.FlightNumber}\n" +
-                          $"Время отправления: {aeroplane.DepartureTime}";
-            MessageBox.Show(text);
+            MessageBox.Show(airport.GetInformationAeroplane((Aeroplane) ListBox.SelectedItem));
         }
 
         private void ThirdTaskButton_OnClick(object sender, RoutedEventArgs e)
         {
-           new ThirdTask.ThirdTask().RemoveAllComments(PathTextBox.Text);
+            BeforeTextBox.Clear();
+            AfterTextBox.Clear();
+            var removeAllComments = new ThirdTask.ThirdTask().RemoveAllComments(PathTextBox.Text);
+            if (removeAllComments.Count == 2)
+            {
+                BeforeTextBox.Text = removeAllComments[0];
+                AfterTextBox.Text = removeAllComments[1];
+            }
         }
     }
 }
