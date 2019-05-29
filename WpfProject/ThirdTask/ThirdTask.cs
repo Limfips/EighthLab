@@ -6,31 +6,17 @@ using System.Windows;
 
 namespace WpfProject.ThirdTask
 {
-    public class ThirdTask
+    public static class ThirdTask
     {
-        public List<string> RemoveAllComments(string filename)
+        public static string RemoveAllComments(StringBuilder content)
         {
-            List<string> values = new List<string>();
-            try
-            {
-                StringBuilder content = new StringBuilder();
-                content.Append(File.ReadAllText(filename));
-                values.Add(content.ToString());
                 RemoveComments(content, "/*", "*/");
                 RemoveComments(content, "/// <summary>", "/// </summary>");
                 RemoveComments(content, "//", Environment.NewLine);
-                File.WriteAllText(filename + ".txt", content.ToString());
-
-                values.Add(content.ToString());
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Повторите ввод");
-            }
-            return values;
+            return content.ToString();
         }
 
-        private void RemoveComments(StringBuilder content, string start, string end)
+        private static void RemoveComments(StringBuilder content, string start, string end)
         {
             string contentStr;
             int startIndex = 0;

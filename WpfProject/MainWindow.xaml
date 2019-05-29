@@ -52,7 +52,7 @@
             <TabItem Header="Второе задание (3-й пункт)">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="250"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -64,12 +64,13 @@
                         <StackPanel Visibility="Visible">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Часы: " Margin="5"/>
-                                <ComboBox x:Name="HoursComboBox"  Margin="5"/>
+                                <ComboBox x:Name="HoursComboBox"  Margin="5" Width="40"/>
                                 <TextBlock Text="Минуты: " Margin="5"/>
-                                <ComboBox x:Name="MinutesComboBox"  Margin="5"/>
+                                <ComboBox x:Name="MinutesComboBox"  Margin="5" Width="40"/>
                             </StackPanel>
                             <DatePicker x:Name="DatePicker"  Margin="5"/>
                             <Button Height="20" x:Name="SearchByDepartureTimeButton" 
+                                    Content="Поиск"
                                     Click="SearchByDepartureTimeButton_OnClick"  Margin="5"/>
                         </StackPanel>
                     </GroupBox>
@@ -78,6 +79,7 @@
                         <StackPanel>
                             <TextBox x:Name="FlightNumberTextBox"  Margin="5"/>
                             <Button Height="20" x:Name="SearchByFlightNumberButton" Margin="5"
+                                    Content="Поиск"
                                     Click="SearchByFlightNumberButton_OnClick"/>
                         </StackPanel>
                     </GroupBox>
@@ -86,6 +88,7 @@
                         <StackPanel>
                             <ComboBox x:Name="ComboBox" Margin="5"/>
                             <Button x:Name="SearchByDestinationNameButton"  Margin="5"
+                                    Content="Поиск"
                                     Height="20" Click="SearchByDestinationNameButton_OnClick"/>
                         </StackPanel>
                     </GroupBox>
@@ -103,8 +106,11 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <TextBlock Margin="5" Text="Введите путь к файлу"/>
-                        <TextBox Margin="5" x:Name="PathTextBox" Text="e:\\cSharp.txt" Width="200"/>
-                        <Button Margin="5" Height="20" Width="50" Click="ThirdTaskButton_OnClick"/>
+                        <TextBox Margin="5" x:Name="PathTextBox" Text="e:\\1\test.txt" Width="200"/>
+                        <Button Margin="5" Content="Открыть"
+                                Height="20" Width="50" Click="OpenFile_OnClick"/>
+                        <Button Margin="5" Content="Очистить"
+                                Height="20" Width="50" Click="ClearFile_OnClick"/>
                     </StackPanel>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>

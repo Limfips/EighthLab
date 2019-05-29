@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -8,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using WpfProject.SecondTask;
+using File = WpfProject.ThirdTask.File;
 
 namespace WpfProject
 {
@@ -69,9 +71,16 @@ namespace WpfProject
                 ListBox.Items.Clear();
                 DateTime dateTime = GetDateTime();
                 List<Aeroplane> aeroplanes = airport.GetAeroplanes(dateTime);
-                foreach (var aeroplane in aeroplanes)
+                if (aeroplanes.Count != 0)
                 {
-                    ListBox.Items.Add(aeroplane);
+                    foreach (var aeroplane in aeroplanes)
+                    {
+                        ListBox.Items.Add(aeroplane.FlightNumber);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("В данный момент самолёты на ваше время отсутствуют");
                 }
             }
             catch (NullReferenceException)
@@ -86,8 +95,9 @@ namespace WpfProject
         {
             try
             {
+                ListBox.Items.Clear();
                 Aeroplane aeroplane = airport.GetAeroplane(Convert.ToInt32(FlightNumberTextBox.Text));
-                string text = airport.GetInformationAeroplane(aeroplane);
+                string text = aeroplane.ToString();
                 MessageBox.Show(text);
                 
             }
@@ -110,7 +120,7 @@ namespace WpfProject
             List<Aeroplane> aeroplanes = airport.GetAeroplanes(destinationNames);
             foreach (var aeroplane in aeroplanes)
             {
-                ListBox.Items.Add(aeroplane);
+                ListBox.Items.Add(aeroplane.FlightNumber);
             } 
         }
 
@@ -128,18 +138,33 @@ namespace WpfProject
         
         private void ListBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show(airport.GetInformationAeroplane((Aeroplane) ListBox.SelectedItem));
+            MessageBox.Show(airport.GetAeroplane((int) ListBox.SelectedItem).ToString());
         }
 
-        private void ThirdTaskButton_OnClick(object sender, RoutedEventArgs e)
+        private void ClearFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            StringBuilder text = new StringBuilder(BeforeTextBox.Text);
+//            text.Append(BeforeTextBox.Text);
+            AfterTextBox.Text = ThirdTask.ThirdTask.RemoveAllComments(text);
+            File.Save(PathTextBox.Text,AfterTextBox.Text);
+        }
+
+        private void OpenFile_OnClick(object sender, RoutedEventArgs e)
         {
             BeforeTextBox.Clear();
             AfterTextBox.Clear();
-            var removeAllComments = new ThirdTask.ThirdTask().RemoveAllComments(PathTextBox.Text);
-            if (removeAllComments.Count == 2)
+
+            if (PathTextBox.Text.Length > 0)
             {
-                BeforeTextBox.Text = removeAllComments[0];
-                AfterTextBox.Text = removeAllComments[1];
+                try
+                {
+                    string content = File.Load(PathTextBox.Text);
+                    BeforeTextBox.Text = content;
+                }
+                catch (FileLoadException exception)
+                {
+                    MessageBox.Show(exception.Message);
+                }
             }
         }
     }

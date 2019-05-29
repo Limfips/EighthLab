@@ -36,7 +36,7 @@ namespace WpfProject.SecondTask
             _aeroplanes = aeroplanes;
         }
 
-        public List<Aeroplane> GetAllAeroplane()
+        public List<Aeroplane> GetAllAeroplanes()
         {
             return _aeroplanes;
         }
@@ -48,18 +48,7 @@ namespace WpfProject.SecondTask
         /// <returns>Cамолёт</returns>
         public Aeroplane GetAeroplane(int flightNumber)
         {
-             Aeroplane aeroplane = _aeroplanes.Find(item => item.FlightNumber==flightNumber);
-             return aeroplane;
-        }
-
-        public string GetInformationAeroplane(Aeroplane aeroplane)
-        {
-            StringBuilder text = new StringBuilder();
-            text.Append("Название пункта назначения: " + aeroplane.DestinationName + '\n')
-                .Append("Код аэрокомпании: " + aeroplane.AirlineCode + '\n')
-                .Append("Номер рейса: " + aeroplane.FlightNumber + '\n')
-                .Append("Время отправления: " + aeroplane.DepartureTime + '\n');
-            return text.ToString();
+             return _aeroplanes.Find(item => item.FlightNumber==flightNumber);
         }
 
         /// <summary>
